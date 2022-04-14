@@ -4,6 +4,8 @@ This is the Spring Boot version of ChatApp :
 
 Features :
 
+* Generated Models (including HATEOAS) with OpenAPI Generator
+
 * Object Relational Mapping with Hibernate and PostgreSQL
 
 * Secure Authentication with Auth0 JWT and Spring Security
