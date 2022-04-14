@@ -1,0 +1,745 @@
+openapi: 3.0.3
+info:
+  title: ChatApp Server
+  version: "1.0"
+  description: Spring version of ChatApp Server
+  contact:
+    email: songoku@gmail.com
+servers:
+  - url: http://localhost:3000/
+tags:
+  - name: Auth
+    description: Auth related operations
+  - name: User
+    description: User related operations
+  - name: Group
+    description: Group related operations
+  - name: Chat
+    description: Chat related operations
+  - name: Chat Messages
+    description: Chat messages related operations
+  - name: Group Messages
+    description: Group messages related operations
+  - name: Group Members
+    description: Group Members related operations
+components:
+  #
+  parameters:
+    id:
+      name: "id"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    chatId:
+      name: "chatId"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    groupId:
+      name: "groupId"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    memberId:
+      name: "memberId"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    senderId:
+      name: "senderId"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    messageId:
+      name: "messageId"
+      in: "path"
+      required: true
+      schema:
+        type: string
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: number
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: number
+  #
+  schemas:
+    User:
+      description: A User
+      type: object
+      properties:
+        id:
+          description: User identifier
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: string
+        avatarURI:
+          type: string
+    #
+    Chat:
+      description: A Chat
+      type: object
+      properties:
+        id:
+          description: Chat identifier
+        recipientA:
+          $ref: "#/components/schemas/User"
+        recipientB:
+          $ref: "#/components/schemas/User"
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+        dateCreated:
+          type: number
+    #
+    ChatMessage:
+      description: A Chat Message
+      type: object
+      properties:
+        id:
+          description: Chat message identifier
+          type: string
+        text:
+          type: string
+        sender:
+          $ref: "#/components/schemas/User"
+        dateSent:
+          type: number
+        chat:
+          type: object
+          $ref: "#/components/schemas/Chat"
+    #
+    Group:
+      description: A Group Message
+      type: object
+      properties:
+        id:
+          description: Group identifier
+          type: string
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        creator:
+          $ref: "#/components/schemas/User"
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/GroupMessage"
+        administrator:
+          $ref: "#/components/schemas/User"
+    #
+    GroupMessage:
+      description: A Group Message
+      type: object
+      properties:
+        id:
+          description: Group message identifier
+          type: string
+        text:
+          type: string
+        dateSent:
+          type: number
+        sender:
+          $ref: "#/components/schemas/User"
+        group:
+          type: object
+          $ref: "#/components/schemas/Group"
+    #
+    SignedInUser:
+      description: Signed-in user information
+      type: object
+      properties:
+        refreshToken:
+          description: Refresh Token, a unique secure string
+          type: string
+        accessToken:
+          description: JWT Token, aka accessToken
+          type: string
+        userId:
+          description: User identifier
+          type: string
+        username:
+          description: User Name
+          type: string
+    #
+    SignInRequest:
+      description: Sign-in request
+      type: object
+      properties:
+        email:
+          description: User email
+          type: string
+        password:
+          description: User password
+          type: string
+    #
+    RefreshToken:
+      description: Contains the refresh token
+      type: object
+      properties:
+        refreshToken:
+          description: Refresh Token
+          type: string
+    #
+    GroupCreationRequest:
+      description: Group creation request
+      type: object
+      properties:
+        name:
+          type: string
+        creator:
+          type: string
+    #
+    SendMessageRequest:
+      description: Send Message Request
+      type: object
+      properties:
+        message:
+          type: string
+    #
+    AddGroupMembersRequest:
+      description: Add Group Members Request
+      type: object
+      properties:
+        targetMembers:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    #
+    UpdateMemberRoleRequest:
+      description: Update Member Role Request
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+            - administrator
+            - standard
+    ChatCreationResponse:
+      description: Successful chat creation response
+      type: object
+      properties:
+        chatId:
+          type: string
+    #
+  #
+#
+paths:
+  # ~
+  /auth/signin:
+    post:
+      tags:
+        - Auth
+      operationId: signIn
+      summary: Signs user in
+      description: Signs user in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInRequest"
+      responses:
+        201:
+          description: "User successfully signed-in"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignedInUser"
+  # ~
+  /auth/signout:
+    post:
+      tags:
+        - Auth
+      operationId: signOut
+      summary: Signs user out
+      description: Signs user out
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshToken"
+      responses:
+        202:
+          description: Accepts the request for logout
+  # ~
+  /auth/token/refresh:
+    post:
+      tags:
+        - Auth
+      operationId: refreshToken
+      summary: Provides new JWT based on valid refresh token
+      description: Provides new JWT based on valid refresh token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshToken"
+      responses:
+        200:
+          description: JWT successfully provided
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignedInUser"
+  # ~
+  /users:
+    # ?
+    post:
+      tags:
+        - User
+      operationId: createUser
+      summary: Creates a new user
+      description: Creates a new user
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        201:
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Incorrect Information
+        401:
+          description: You're not allowed to created
+  # ~
+  /users/{id}:
+    # ?
+    get:
+      tags:
+        - User
+      operationId: getUser
+      summary: Gets user by ID
+      description: Gets user by ID
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        200:
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: User is not found
+    # ?
+    put:
+      tags:
+        - User
+      operationId: updateUser
+      summary: Updates user by ID
+      description: Updates user by ID
+      parameters:
+        - $ref: "#/components/parameters/id"
+      requestBody:
+        description: Updated user
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: User details updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: User not found
+    # ?
+    delete:
+      tags:
+        - User
+      operationId: deleteUser
+      summary: Deletes A User
+      description: Deletes A User
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        200:
+          description: User deleted successfully
+        404:
+          description: User is not found
+  # ~
+  /chats/{senderId}/{receiverId}:
+    # ?
+    post:
+      tags:
+        - User
+      operationId: "startChat"
+      summary: "Creating new discussion with User by sending a message"
+      description: "Creating new discussion with User by sending a message"
+      parameters:
+        - $ref: "#/components/parameters/senderId"
+        - name: "receiverId"
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        200:
+          description: "Chat successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatCreationResponse"
+        404:
+          description: User not found
+  # ~
+  /chats/{chatId}:
+    # ?
+    delete:
+      tags:
+        - Chat
+      operationId: "deleteChat"
+      summary: Deletes a chat
+      description: Deletes a chat
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+      responses:
+        200:
+          description: Chat deleted successfully
+  # ~
+  /chats/{chatId}/messages:
+    # ?
+    get:
+      tags:
+        - Chat Messages
+      operationId: "getAllChatMessages"
+      summary: "Fetches {limit} number of chat messages from number {offset}"
+      description: "Fetches {limit} number of chat messages from number {offset}"
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        200:
+          description: Chat messages successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatMessage"
+
+        404:
+          description: Chat not found
+    # ?
+    post:
+      tags:
+        - Chat Messages
+      operationId: "sendMessage"
+      summary: "Send a message to a discussion"
+      description: "Send a message to a discussion"
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              title: message
+      responses:
+        200:
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatMessage"
+        404:
+          description: Chat not found
+  # ~
+  /chats/{chatId}/messages/{messageId}:
+    # ?
+    get:
+      tags:
+        - Chat Messages
+      operationId: "Get chat message by ID"
+      summary: "getMessage"
+      description: "getMessage"
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+        - $ref: "#/components/parameters/messageId"
+      responses:
+        200:
+          description: "Message retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatMessage"
+        404:
+          description: "Message not found"
+    # ?
+    delete:
+      tags:
+        - Chat Messages
+      operationId: "deleteChatMessage"
+      summary: Deletes a message from chat
+      description: Deletes a message from chat
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+        - $ref: "#/components/parameters/messageId"
+      responses:
+        200:
+          description: Message successfully deleted
+        404:
+          description: Message not found
+  # ~
+  /groups:
+    # ?
+    post:
+      tags:
+        - Group
+      operationId: "createGroup"
+      summary: "Creates a group"
+      description: "Creates a group"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupCreationRequest"
+      responses:
+        200:
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+  # ~
+  /groups/{groupId}:
+    get:
+      tags:
+        - Group
+      operationId: "getGroupInformation"
+      summary: "Fetches group information"
+      description: "Fetches group information"
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      responses:
+        200:
+          description: Group successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        404:
+          description: Group not found
+    delete:
+      tags:
+        - Group
+      operationId: "deleteGroup"
+      summary: "Deletes group"
+      description: "Deletes group"
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      responses:
+        200:
+          description: Group successfully deleted
+        404:
+          description: Group not found
+    put:
+      tags:
+        - Group
+      operationId: "updateGroup"
+      summary: "Updates group information"
+      description: "Updates group information"
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Group"
+      responses:
+        200:
+          description: Group successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+  # ~
+  /groups/{groupId}/messages:
+    # ?
+    get:
+      tags:
+        - Group Messages
+      operationId: "getAllGroupMessages"
+      summary: "Fetches {limit} number of group messages from number {offset}"
+      description: "Fetches {limit} number of group messages from number {offset}"
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        200:
+          description: Group messages successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupMessage"
+
+        404:
+          description: Group not found
+    # ?
+    post:
+      tags:
+        - Group Messages
+      operationId: "sendGroupMessage"
+      summary: "Sends message in a group"
+      description: "Sends message in a group"
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        200:
+          description: Group message successfully sent
+        404:
+          description: Group not found
+  # ~
+  /groups/{groupId}/messages/{messageId}:
+    # ?
+    get:
+      tags:
+        - Group Messages
+      operationId: getGroupMessage
+      summary: Fetch single group message
+      description: Fetch single group message
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+        - $ref: "#/components/parameters/messageId"
+      responses:
+        200:
+          description: Group message successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupMessage"
+        404:
+          description: Message not found
+    # ?
+    delete:
+      tags:
+        - Group Messages
+      operationId: deleteGroupMessage
+      summary: Delete message in group
+      description: Delete message in group
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+        - $ref: "#/components/parameters/messageId"
+      responses:
+        200:
+          description: Group message deleted successfully
+        404:
+          description: Message not found
+  # ~
+  /groups/{groupId}/members:
+    # ?
+    get:
+      tags:
+        - Group Members
+      operationId: getGroupMembers
+      summary: Lists all group members
+      description: Lists all group members
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      responses:
+        200:
+          description: Group members fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    # ?
+    post:
+      tags:
+        - Group Members
+      operationId: addMembers
+      summary: Add members to group
+      description: Add members to group
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddGroupMembersRequest"
+      responses:
+        200:
+          description: Group members added successfully
+        404:
+          description: Group not found
+  # ~
+  /groups/{groupId}/members/{memberId}:
+    delete:
+      tags:
+        - Group Members
+      operationId: getMemberInfo
+      summary: Gets member info such as number of messages written
+      description: Gets member info such as number of messages written
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+        - $ref: "#/components/parameters/memberId"
+      responses:
+        200:
+          description: Member successfully removed
+        404:
+          description: Member or group not found
+    # ?
+    put:
+      tags:
+        - Group Members
+      operationId: updateMemberRole
+      summary: Updates member role
+      description: Updates member role
+      parameters:
+        - $ref: "#/components/parameters/groupId"
+        - $ref: "#/components/parameters/memberId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMemberRoleRequest"
+      responses:
+        200:
+          description: Member role successfully updated
+        404:
+          description: Member or group not found

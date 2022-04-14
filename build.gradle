@@ -1,0 +1,46 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.6'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'mr.gk2ms'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	compileOnly 'javax.validation:validation-api:2.0.1.Final'
+	compileOnly 'io.swagger.core.v3:swagger-annotations:2.1.13'
+	compileOnly 'org.openapitools:jackson-databind-nullable:0.2.2'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'com.auth0:java-jwt:3.19.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+sourceSets.main.java.srcDir "build/src/main/java"
+sourceSets.main.resources.srcDir "build/src/main/resources"
