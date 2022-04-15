@@ -37,6 +37,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import mr.gk2ms.chatapp.security.config.constants.Roles;
 
+import static mr.gk2ms.chatapp.security.Constants.SIGN_IN_URL;
 import static mr.gk2ms.chatapp.security.Constants.SIGN_UP_URL;
 import static mr.gk2ms.chatapp.security.Constants.TOKEN_URL;
 import static mr.gk2ms.chatapp.security.Constants.REFRESH_URL;
@@ -163,6 +164,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sameOrigin()
 			.and()
 			.authorizeRequests()
+			.antMatchers(HttpMethod.POST, SIGN_IN_URL)
+			.permitAll()
 			.antMatchers(HttpMethod.POST, SIGN_UP_URL)
 			.permitAll()
 			.antMatchers(HttpMethod.POST, TOKEN_URL)

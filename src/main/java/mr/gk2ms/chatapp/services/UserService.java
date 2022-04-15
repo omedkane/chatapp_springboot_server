@@ -119,7 +119,9 @@ public class UserService {
 
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 
-		BeanUtils.copyProperties(user, userEntity.password(encodedPassword));
+		BeanUtils.copyProperties(user, userEntity);
+
+		userEntity.password(encodedPassword);
 
 		return userEntity;
 	}
