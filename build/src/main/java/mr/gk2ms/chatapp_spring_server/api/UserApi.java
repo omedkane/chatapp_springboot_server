@@ -150,10 +150,9 @@ public interface UserApi {
 
 
     /**
-     * POST /chats/{senderId}/{receiverId} : Creating new discussion with User by sending a message
+     * POST /chats/new/{receiverId} : Creating new discussion with User by sending a message
      * Creating new discussion with User by sending a message
      *
-     * @param senderId  (required)
      * @param receiverId  (required)
      * @param sendMessageRequest  (optional)
      * @return Chat successfully created (status code 200)
@@ -170,19 +169,18 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/chats/{senderId}/{receiverId}",
+        value = "/chats/new/{receiverId}",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
     default ResponseEntity<ChatCreationResponse> startChat(
-        @Parameter(name = "senderId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("senderId") String senderId,
         @Parameter(name = "receiverId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("receiverId") String receiverId,
         @Parameter(name = "SendMessageRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) SendMessageRequest sendMessageRequest
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"chatId\" : \"chatId\" }";
+                    String exampleString = "{ \"schema\" : { \"dateCreated\" : 6.027456183070403, \"recipientA\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"recipientB\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"messages\" : [ { \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }, { \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 } ], \"id\" : \"\" } }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

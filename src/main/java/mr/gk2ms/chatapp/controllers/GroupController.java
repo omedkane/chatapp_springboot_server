@@ -1,38 +1,36 @@
-// package mr.gk2ms.chatapp.controllers;
+package mr.gk2ms.chatapp.controllers;
 
-// import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 
-// import mr.gk2ms.chatapp.entities.GroupEntity;
-// import mr.gk2ms.chatapp_spring_server.model.Group;
+import mr.gk2ms.chatapp.services.GroupService;
+import mr.gk2ms.chatapp_spring_server.model.Group;
+import mr.gk2ms.chatapp_spring_server.model.GroupCreationRequest;
 
-// public class GroupController implements IGroupController {
+public class GroupController {
+	private GroupService service;
 
-// 	public interface Shit {
-// 		public void onShitChanged();
-// 	}
+	public GroupController(GroupService service) {
+		this.service = service;
+	}
 
-// 	@Override
-// 	public ResponseEntity<Group> create(GroupEntity group) {
-// 		// TODO Auto-generated method stub
-// 		return null;
-// 	}
+	public ResponseEntity<Group> create(GroupCreationRequest group) {
 
-// 	@Override
-// 	public ResponseEntity<Group> read(String id) {
-// 		// TODO Auto-generated method stub
-// 		return null;
-// 	}
+		return null;
+	}
 
-// 	@Override
-// 	public ResponseEntity<Void> delete(String id) {
-// 		// TODO Auto-generated method stub
-// 		return null;
-// 	}
+	public ResponseEntity<Group> read(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-// 	@Override
-// 	public ResponseEntity<Void> update(String id) {
-// 		// TODO Auto-generated method stub
-// 		return null;
-// 	}
+	public ResponseEntity<Void> delete(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-// }
+	public ResponseEntity<Void> update(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

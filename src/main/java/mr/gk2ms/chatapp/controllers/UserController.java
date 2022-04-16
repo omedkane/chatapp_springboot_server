@@ -18,7 +18,7 @@ import mr.gk2ms.chatapp_spring_server.model.User;
 
 @RestController
 @RequestMapping("/users")
-public class UserController implements IUserController {
+public class UserController {
 	private final UserRepository repository;
 
 	public UserController(UserRepository repository) {
@@ -44,21 +44,18 @@ public class UserController implements IUserController {
 	}
 
 	@DeleteMapping("/{userId}")
-	@Override
 	public ResponseEntity<User> delete(@PathVariable String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@PutMapping("/{userId}")
-	@Override
 	public ResponseEntity<User> update(UserEntity user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@GetMapping("/")
-	@Override
 	public ResponseEntity<User> read(String userId) {
 		// TODO Auto-generated method stub
 		return null;

@@ -1,7 +1,6 @@
 package mr.gk2ms.chatapp_spring_server.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.annotation.Generated;
@@ -33,7 +32,7 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
   private User sender;
 
   @JsonProperty("dateSent")
-  private BigDecimal dateSent;
+  private int dateSent;
 
   @JsonProperty("chat")
   private Chat chat;
@@ -95,7 +94,7 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
     this.sender = sender;
   }
 
-  public ChatMessage dateSent(BigDecimal dateSent) {
+  public ChatMessage dateSent(int dateSent) {
     this.dateSent = dateSent;
     return this;
   }
@@ -106,11 +105,11 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
   */
   @Valid 
   @Schema(name = "dateSent", required = false)
-  public BigDecimal getDateSent() {
+  public int getDateSent() {
     return dateSent;
   }
 
-  public void setDateSent(BigDecimal dateSent) {
+  public void setDateSent(int dateSent) {
     this.dateSent = dateSent;
   }
 

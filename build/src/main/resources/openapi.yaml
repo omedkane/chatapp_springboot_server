@@ -198,18 +198,11 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: User
-  /chats/{senderId}/{receiverId}:
+  /chats/new/{receiverId}:
     post:
       description: Creating new discussion with User by sending a message
       operationId: startChat
       parameters:
-      - explode: false
-        in: path
-        name: senderId
-        required: true
-        schema:
-          type: string
-        style: simple
       - explode: false
         in: path
         name: receiverId
@@ -869,8 +862,28 @@ components:
           id: id
           email: email
         messages:
-        - null
-        - null
+        - sender:
+            avatarURI: avatarURI
+            firstName: firstName
+            lastName: lastName
+            password: password
+            phone: phone
+            id: id
+            email: email
+          id: id
+          text: text
+          dateSent: 0.8008281904610115
+        - sender:
+            avatarURI: avatarURI
+            firstName: firstName
+            lastName: lastName
+            password: password
+            phone: phone
+            id: id
+            email: email
+          id: id
+          text: text
+          dateSent: 0.8008281904610115
         id: ""
       properties:
         id:
@@ -897,28 +910,6 @@ components:
           phone: phone
           id: id
           email: email
-        chat:
-          dateCreated: 6.027456183070403
-          recipientA:
-            avatarURI: avatarURI
-            firstName: firstName
-            lastName: lastName
-            password: password
-            phone: phone
-            id: id
-            email: email
-          recipientB:
-            avatarURI: avatarURI
-            firstName: firstName
-            lastName: lastName
-            password: password
-            phone: phone
-            id: id
-            email: email
-          messages:
-          - null
-          - null
-          id: ""
         id: id
         text: text
         dateSent: 0.8008281904610115
@@ -1095,8 +1086,11 @@ components:
       description: Send Message Request
       example:
         message: message
+        target: target
       properties:
         message:
+          type: string
+        target:
           type: string
       type: object
     AddGroupMembersRequest:
@@ -1137,8 +1131,49 @@ components:
     ChatCreationResponse:
       description: Successful chat creation response
       example:
-        chatId: chatId
+        schema:
+          dateCreated: 6.027456183070403
+          recipientA:
+            avatarURI: avatarURI
+            firstName: firstName
+            lastName: lastName
+            password: password
+            phone: phone
+            id: id
+            email: email
+          recipientB:
+            avatarURI: avatarURI
+            firstName: firstName
+            lastName: lastName
+            password: password
+            phone: phone
+            id: id
+            email: email
+          messages:
+          - sender:
+              avatarURI: avatarURI
+              firstName: firstName
+              lastName: lastName
+              password: password
+              phone: phone
+              id: id
+              email: email
+            id: id
+            text: text
+            dateSent: 0.8008281904610115
+          - sender:
+              avatarURI: avatarURI
+              firstName: firstName
+              lastName: lastName
+              password: password
+              phone: phone
+              id: id
+              email: email
+            id: id
+            text: text
+            dateSent: 0.8008281904610115
+          id: ""
       properties:
-        chatId:
-          type: string
+        schema:
+          $ref: '#/components/schemas/Chat'
       type: object

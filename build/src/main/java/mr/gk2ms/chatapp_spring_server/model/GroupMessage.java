@@ -1,7 +1,6 @@
 package mr.gk2ms.chatapp_spring_server.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.annotation.Generated;
@@ -30,7 +29,7 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
   private String text;
 
   @JsonProperty("dateSent")
-  private BigDecimal dateSent;
+  private int dateSent;
 
   @JsonProperty("sender")
   private User sender;
@@ -76,7 +75,7 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
     this.text = text;
   }
 
-  public GroupMessage dateSent(BigDecimal dateSent) {
+  public GroupMessage dateSent(int dateSent) {
     this.dateSent = dateSent;
     return this;
   }
@@ -87,11 +86,11 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
   */
   @Valid 
   @Schema(name = "dateSent", required = false)
-  public BigDecimal getDateSent() {
+  public int getDateSent() {
     return dateSent;
   }
 
-  public void setDateSent(BigDecimal dateSent) {
+  public void setDateSent(int dateSent) {
     this.dateSent = dateSent;
   }
 

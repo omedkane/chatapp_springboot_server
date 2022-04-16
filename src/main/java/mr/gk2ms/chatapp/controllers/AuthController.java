@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mr.gk2ms.chatapp.entities.UserEntity;
 import mr.gk2ms.chatapp.exceptions.ResourceNotFoundException;
 import mr.gk2ms.chatapp.exceptions.utilities.ErrorCode;
+import mr.gk2ms.chatapp.services.AuthService;
 import mr.gk2ms.chatapp.services.UserService;
 import mr.gk2ms.chatapp_spring_server.api.AuthApi;
 import mr.gk2ms.chatapp_spring_server.model.RefreshToken;
@@ -26,10 +27,12 @@ import mr.gk2ms.chatapp_spring_server.model.User;
 @RestController
 @RequestMapping("/auth")
 public class AuthController implements AuthApi {
+	private final AuthService service;
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 
-	public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
+	public AuthController(AuthService authService, UserService userService, PasswordEncoder passwordEncoder) {
+		this.service = authService;
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -48,7 +51,7 @@ public class AuthController implements AuthApi {
 		boolean passMatches = passwordEncoder.matches(password, user.getPassword());
 
 		if (passMatches) {
-			return ResponseEntity.ok(userService.getSignedInUser(user));
+			return ResponseEntity.ok(service.getSignedInUser(user));
 		} else {
 			throw new InsufficientAuthenticationException("Email or password may be incorrect");
 		}
@@ -56,17 +59,17 @@ public class AuthController implements AuthApi {
 
 	@PostMapping("/signout")
 	public ResponseEntity<Void> signOut(@Valid RefreshToken refreshToken) {
-		userService.removeRefreshToken(refreshToken);
+		service.removeRefreshToken(refreshToken);
 
 		return ResponseEntity.accepted().build();
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<SignedInUser> signUp(@RequestBody User user) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user).get());
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.signUserUp(user).get());
 	}
 
 	public ResponseEntity<SignedInUser> getAccessToken(@Valid RefreshToken refreshToken) {
-		return ResponseEntity.ok(userService.getAccessToken(refreshToken).get());
+		return ResponseEntity.ok(service.getAccessToken(refreshToken).get());
 	}
 }

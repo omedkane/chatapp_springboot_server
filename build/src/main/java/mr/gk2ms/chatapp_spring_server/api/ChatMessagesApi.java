@@ -5,7 +5,7 @@
  */
 package mr.gk2ms.chatapp_spring_server.api;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -97,13 +97,13 @@ public interface ChatMessagesApi {
     )
     default ResponseEntity<List<ChatMessage>> getAllChatMessages(
         @Parameter(name = "chatId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("chatId") String chatId,
-        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) BigDecimal offset,
-        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) BigDecimal limit
+        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) int offset,
+        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) int limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"chat\" : { \"dateCreated\" : 6.027456183070403, \"recipientA\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"recipientB\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"messages\" : [ null, null ], \"id\" : \"\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -144,7 +144,7 @@ public interface ChatMessagesApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"chat\" : { \"dateCreated\" : 6.027456183070403, \"recipientA\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"recipientB\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"messages\" : [ null, null ], \"id\" : \"\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -186,7 +186,7 @@ public interface ChatMessagesApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"chat\" : { \"dateCreated\" : 6.027456183070403, \"recipientA\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"recipientB\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"messages\" : [ null, null ], \"id\" : \"\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.annotation.Generated;
-import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.RepresentationModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,22 +24,18 @@ public class User extends RepresentationModel<User>  implements Serializable {
   @JsonProperty("id")
   private String id;
 
-  @Length(min = 2)
   @JsonProperty("firstName")
   private String firstName;
 
-  @Length(min = 2)
   @JsonProperty("lastName")
   private String lastName;
 
-  @Email
   @JsonProperty("email")
   private String email;
-  
-  @Length(min = 8)
+
   @JsonProperty("password")
   private String password;
-  
+
   @JsonProperty("phone")
   private String phone;
 

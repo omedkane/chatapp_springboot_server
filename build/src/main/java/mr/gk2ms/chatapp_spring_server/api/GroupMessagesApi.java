@@ -5,7 +5,7 @@
  */
 package mr.gk2ms.chatapp_spring_server.api;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -98,8 +98,8 @@ public interface GroupMessagesApi {
     )
     default ResponseEntity<List<GroupMessage>> getAllGroupMessages(
         @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) BigDecimal offset,
-        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) BigDecimal limit
+        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) int offset,
+        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) int limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

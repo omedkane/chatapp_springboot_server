@@ -66,13 +66,13 @@ components:
       in: query
       required: false
       schema:
-        type: number
+        type: integer
     limit:
       name: limit
       in: query
       required: false
       schema:
-        type: number
+        type: integer
   #
   schemas:
     User:
@@ -110,7 +110,7 @@ components:
           items:
             $ref: "#/components/schemas/ChatMessage"
         dateCreated:
-          type: number
+          type: integer
     #
     ChatMessage:
       description: A Chat Message
@@ -124,7 +124,7 @@ components:
         sender:
           $ref: "#/components/schemas/User"
         dateSent:
-          type: number
+          type: integer
         chat:
           type: object
           $ref: "#/components/schemas/Chat"
@@ -159,7 +159,7 @@ components:
         text:
           type: string
         dateSent:
-          type: number
+          type: integer
         sender:
           $ref: "#/components/schemas/User"
         group:
@@ -217,6 +217,8 @@ components:
       properties:
         message:
           type: string
+        target:
+          type: string
     #
     AddGroupMembersRequest:
       description: Add Group Members Request
@@ -240,8 +242,8 @@ components:
       description: Successful chat creation response
       type: object
       properties:
-        chatId:
-          type: string
+        schema:
+          $ref: "#/components/schemas/Chat"
     #
   #
 #
@@ -387,7 +389,7 @@ paths:
         404:
           description: User is not found
   # ~
-  /chats/{senderId}/{receiverId}:
+  /chats/new/{receiverId}:
     # ?
     post:
       tags:
@@ -396,7 +398,6 @@ paths:
       summary: "Creating new discussion with User by sending a message"
       description: "Creating new discussion with User by sending a message"
       parameters:
-        - $ref: "#/components/parameters/senderId"
         - name: "receiverId"
           in: path
           required: true

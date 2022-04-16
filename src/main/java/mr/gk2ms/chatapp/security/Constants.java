@@ -5,6 +5,8 @@ public abstract class Constants {
 	public static final String AUTHORITY_PREFIX = "ROLE_";
 	public static final String ROLES_CLAIM = "roles";
 	public static final int EXPIRATION_TIME = 86_400_000;
+	public static final String AUTHORIZATION = "Authorization";
+	public static final String REFRESH_TOKEN = "Refresh-Token";
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final String SIGN_UP_URL = "/auth/signup";
 	public static final String SIGN_IN_URL = "/auth/signin";

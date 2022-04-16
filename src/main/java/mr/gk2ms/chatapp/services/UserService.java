@@ -1,7 +1,5 @@
 package mr.gk2ms.chatapp.services;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -12,34 +10,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import mr.gk2ms.chatapp.entities.UserEntity;
-import mr.gk2ms.chatapp.entities.UserTokenEntity;
 import mr.gk2ms.chatapp.exceptions.GenericAlreadyExistsException;
-import mr.gk2ms.chatapp.exceptions.InvalidRefreshTokenException;
-import mr.gk2ms.chatapp.miscellaneous.utilities.RandomHolder;
 import mr.gk2ms.chatapp.repositories.UserRepository;
-import mr.gk2ms.chatapp.repositories.UserTokenRepository;
-import mr.gk2ms.chatapp.security.config.constants.Roles;
-import mr.gk2ms.chatapp.security.helpers.JwtManager;
-import mr.gk2ms.chatapp_spring_server.model.RefreshToken;
-import mr.gk2ms.chatapp_spring_server.model.SignedInUser;
 import mr.gk2ms.chatapp_spring_server.model.User;
 
 @Service
-public class UserService {
+public class UserService extends BaseService<UserEntity, User> {
 	private UserRepository repository;
-	private UserTokenRepository userTokenRepository;
-	private JwtManager tokenManager;
 	private PasswordEncoder passwordEncoder;
 
-	public UserService(
-		UserRepository repository,
-		UserTokenRepository userTokenRepository,
-		JwtManager tokenManager,
-		PasswordEncoder passwordEncoder
-	) {
+	public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
 		this.repository = repository;
-		this.userTokenRepository = userTokenRepository;
-		this.tokenManager = tokenManager;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -53,67 +34,18 @@ public class UserService {
 			);
 	}
 
-	public Optional<SignedInUser> createUser(User user) {
+	public UserEntity createUser(User user) {
 		String email = user.getEmail();
 		if (repository.findByEmail(email).isPresent()) {
 			throw new GenericAlreadyExistsException(
 				String.format("A User associated with this email (%s) already exists", email)
 			);
 		} else {
-			UserEntity userEntity = repository.save(toEntity(user));
-			return Optional.of(createSignedUserWithRefreshToken(userEntity));
+			return repository.save(toEntity(user));
 		}
 	}
 
-	private SignedInUser createSignedUserWithRefreshToken(UserEntity userEntity) {
-		return createSignedInUser(userEntity).refreshToken(createRefreshToken(userEntity));
-	}
-
-	private SignedInUser createSignedInUser(UserEntity userEntity) {
-		String accessToken = tokenManager
-			.create(
-				org.springframework.security.core.userdetails.User
-					.builder()
-					.username(userEntity.getEmail())
-					.password(userEntity.getPassword())
-					.authorities(Roles.USER)
-					.build()
-			);
-		return new SignedInUser()
-			.username(userEntity.getEmail())
-			.accessToken(accessToken)
-			.userId(userEntity.getId().toString());
-	}
-
-	private String createRefreshToken(UserEntity userEntity) {
-		String token = RandomHolder.randomKey(128);
-
-		userTokenRepository.save(new UserTokenEntity().refreshToken(token).user(userEntity));
-
-		return token;
-	}
-
-	public SignedInUser getSignedInUser(UserEntity userEntity) {
-		userTokenRepository.deleteByUserId(userEntity.getId());
-
-		return createSignedUserWithRefreshToken(userEntity);
-	}
-
-	public Optional<SignedInUser> getAccessToken(RefreshToken refreshToken) {
-		return userTokenRepository
-			.findByRefreshToken(refreshToken.getRefreshToken())
-			.map(userToken -> Optional.of(createSignedInUser(userToken.getUser())))
-			.orElseThrow(() -> new InvalidRefreshTokenException("Invalid Token"));
-	}
-
-	public void removeRefreshToken(RefreshToken refreshToken) {
-		userTokenRepository
-			.findByRefreshToken(refreshToken.getRefreshToken())
-			.ifPresentOrElse(userTokenRepository::delete, () -> {
-				throw new InvalidRefreshTokenException("Invalid Refresh Token");
-			});
-	}
-
+	@Override
 	public UserEntity toEntity(User user) {
 		UserEntity userEntity = new UserEntity();
 
@@ -124,5 +56,16 @@ public class UserService {
 		userEntity.password(encodedPassword);
 
 		return userEntity;
+	}
+
+	@Override
+	public User toModel(UserEntity userEntity) {
+		User user = new User()
+			.firstName(userEntity.getFirstName())
+			.lastName(userEntity.getLastName())
+			.email(userEntity.getEmail())
+			.avatarURI(userEntity.getAvatarURI());
+
+		return user;
 	}
 }

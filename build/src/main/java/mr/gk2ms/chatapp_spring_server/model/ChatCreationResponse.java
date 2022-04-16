@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.annotation.Generated;
+import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,26 +22,26 @@ public class ChatCreationResponse extends RepresentationModel<ChatCreationRespon
 
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("chatId")
-  private String chatId;
+  @JsonProperty("schema")
+  private Chat schema;
 
-  public ChatCreationResponse chatId(String chatId) {
-    this.chatId = chatId;
+  public ChatCreationResponse schema(Chat schema) {
+    this.schema = schema;
     return this;
   }
 
   /**
-   * Get chatId
-   * @return chatId
+   * Get schema
+   * @return schema
   */
-  
-  @Schema(name = "chatId", required = false)
-  public String getChatId() {
-    return chatId;
+  @Valid 
+  @Schema(name = "schema", required = false)
+  public Chat getSchema() {
+    return schema;
   }
 
-  public void setChatId(String chatId) {
-    this.chatId = chatId;
+  public void setSchema(Chat schema) {
+    this.schema = schema;
   }
 
   @Override
@@ -52,19 +53,19 @@ public class ChatCreationResponse extends RepresentationModel<ChatCreationRespon
       return false;
     }
     ChatCreationResponse chatCreationResponse = (ChatCreationResponse) o;
-    return Objects.equals(this.chatId, chatCreationResponse.chatId);
+    return Objects.equals(this.schema, chatCreationResponse.schema);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatId);
+    return Objects.hash(schema);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChatCreationResponse {\n");
-    sb.append("    chatId: ").append(toIndentedString(chatId)).append("\n");
+    sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
     sb.append("}");
     return sb.toString();
   }

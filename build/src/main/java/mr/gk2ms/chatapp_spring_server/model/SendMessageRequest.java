@@ -24,6 +24,9 @@ public class SendMessageRequest extends RepresentationModel<SendMessageRequest> 
   @JsonProperty("message")
   private String message;
 
+  @JsonProperty("target")
+  private String target;
+
   public SendMessageRequest message(String message) {
     this.message = message;
     return this;
@@ -43,6 +46,25 @@ public class SendMessageRequest extends RepresentationModel<SendMessageRequest> 
     this.message = message;
   }
 
+  public SendMessageRequest target(String target) {
+    this.target = target;
+    return this;
+  }
+
+  /**
+   * Get target
+   * @return target
+  */
+  
+  @Schema(name = "target", required = false)
+  public String getTarget() {
+    return target;
+  }
+
+  public void setTarget(String target) {
+    this.target = target;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -52,12 +74,13 @@ public class SendMessageRequest extends RepresentationModel<SendMessageRequest> 
       return false;
     }
     SendMessageRequest sendMessageRequest = (SendMessageRequest) o;
-    return Objects.equals(this.message, sendMessageRequest.message);
+    return Objects.equals(this.message, sendMessageRequest.message) &&
+        Objects.equals(this.target, sendMessageRequest.target);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(message);
+    return Objects.hash(message, target);
   }
 
   @Override
@@ -65,6 +88,7 @@ public class SendMessageRequest extends RepresentationModel<SendMessageRequest> 
     StringBuilder sb = new StringBuilder();
     sb.append("class SendMessageRequest {\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    target: ").append(toIndentedString(target)).append("\n");
     sb.append("}");
     return sb.toString();
   }

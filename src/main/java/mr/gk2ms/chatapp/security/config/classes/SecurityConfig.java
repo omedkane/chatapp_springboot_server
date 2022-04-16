@@ -1,5 +1,12 @@
 package mr.gk2ms.chatapp.security.config.classes;
 
+import static mr.gk2ms.chatapp.security.Constants.AUTHORITY_PREFIX;
+import static mr.gk2ms.chatapp.security.Constants.REFRESH_URL;
+import static mr.gk2ms.chatapp.security.Constants.ROLES_CLAIM;
+import static mr.gk2ms.chatapp.security.Constants.SIGN_IN_URL;
+import static mr.gk2ms.chatapp.security.Constants.SIGN_UP_URL;
+import static mr.gk2ms.chatapp.security.Constants.TOKEN_URL;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Key;
@@ -36,13 +43,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import mr.gk2ms.chatapp.security.config.constants.Roles;
-
-import static mr.gk2ms.chatapp.security.Constants.SIGN_IN_URL;
-import static mr.gk2ms.chatapp.security.Constants.SIGN_UP_URL;
-import static mr.gk2ms.chatapp.security.Constants.TOKEN_URL;
-import static mr.gk2ms.chatapp.security.Constants.REFRESH_URL;
-import static mr.gk2ms.chatapp.security.Constants.AUTHORITY_PREFIX;
-import static mr.gk2ms.chatapp.security.Constants.ROLES_CLAIM;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

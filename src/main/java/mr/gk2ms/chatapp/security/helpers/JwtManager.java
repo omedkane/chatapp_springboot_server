@@ -1,6 +1,8 @@
 package mr.gk2ms.chatapp.security.helpers;
 
 import static java.util.stream.Collectors.toList;
+import static mr.gk2ms.chatapp.security.Constants.EXPIRATION_TIME;
+import static mr.gk2ms.chatapp.security.Constants.ROLES_CLAIM;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -12,9 +14,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import static mr.gk2ms.chatapp.security.Constants.EXPIRATION_TIME;
-import static mr.gk2ms.chatapp.security.Constants.ROLES_CLAIM;
 
 @Component
 public class JwtManager {

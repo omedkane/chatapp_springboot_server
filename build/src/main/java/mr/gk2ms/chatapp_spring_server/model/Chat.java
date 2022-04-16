@@ -1,7 +1,6 @@
 package mr.gk2ms.chatapp_spring_server.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +27,7 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
-  private JsonNullable<Object> id = JsonNullable.undefined();
+  private String id;
 
   @JsonProperty("recipientA")
   private User recipientA;
@@ -41,10 +40,10 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
   private List<ChatMessage> messages = null;
 
   @JsonProperty("dateCreated")
-  private BigDecimal dateCreated;
+  private int dateCreated;
 
-  public Chat id(Object id) {
-    this.id = JsonNullable.of(id);
+  public Chat id(String id) {
+    this.id = id;
     return this;
   }
 
@@ -54,11 +53,11 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
   */
   
   @Schema(name = "id", description = "Chat identifier", required = false)
-  public JsonNullable<Object> getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(JsonNullable<Object> id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -127,7 +126,7 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
     this.messages = messages;
   }
 
-  public Chat dateCreated(BigDecimal dateCreated) {
+  public Chat dateCreated(int dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -138,11 +137,11 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
   */
   @Valid 
   @Schema(name = "dateCreated", required = false)
-  public BigDecimal getDateCreated() {
+  public int getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(BigDecimal dateCreated) {
+  public void setDateCreated(int dateCreated) {
     this.dateCreated = dateCreated;
   }
 
