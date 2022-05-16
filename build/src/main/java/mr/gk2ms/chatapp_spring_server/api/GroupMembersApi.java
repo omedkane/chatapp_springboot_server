@@ -27,8 +27,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import mr.gk2ms.chatapp_spring_server.model.AddGroupMembersRequest;
-import mr.gk2ms.chatapp_spring_server.model.UpdateMemberRoleRequest;
+import mr.gk2ms.chatapp_spring_server.model.UpdateGroupMembersRequest;
 import mr.gk2ms.chatapp_spring_server.model.User;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -41,31 +40,31 @@ public interface GroupMembersApi {
     }
 
     /**
-     * POST /groups/{groupId}/members : Add members to group
-     * Add members to group
+     * PUT /groups/{groupId}/members : Manage group members
+     * Add, remove, promote, demote members of group.
      *
      * @param groupId  (required)
-     * @param addGroupMembersRequest  (optional)
-     * @return Group members added successfully (status code 200)
+     * @param updateGroupMembersRequest  (optional)
+     * @return Group members updated successfully (status code 200)
      *         or Group not found (status code 404)
      */
     @Operation(
         operationId = "addMembers",
-        summary = "Add members to group",
+        summary = "Manage group members",
         tags = { "Group Members" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Group members added successfully"),
+            @ApiResponse(responseCode = "200", description = "Group members updated successfully"),
             @ApiResponse(responseCode = "404", description = "Group not found")
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
+        method = RequestMethod.PUT,
         value = "/groups/{groupId}/members",
         consumes = { "application/json" }
     )
     default ResponseEntity<Void> addMembers(
         @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "AddGroupMembersRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) AddGroupMembersRequest addGroupMembersRequest
+        @Parameter(name = "UpdateGroupMembersRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) UpdateGroupMembersRequest updateGroupMembersRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -104,71 +103,6 @@ public interface GroupMembersApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * DELETE /groups/{groupId}/members/{memberId} : Gets member info such as number of messages written
-     * Gets member info such as number of messages written
-     *
-     * @param groupId  (required)
-     * @param memberId  (required)
-     * @return Member successfully removed (status code 200)
-     *         or Member or group not found (status code 404)
-     */
-    @Operation(
-        operationId = "getMemberInfo",
-        summary = "Gets member info such as number of messages written",
-        tags = { "Group Members" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Member successfully removed"),
-            @ApiResponse(responseCode = "404", description = "Member or group not found")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/groups/{groupId}/members/{memberId}"
-    )
-    default ResponseEntity<Void> getMemberInfo(
-        @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "memberId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("memberId") String memberId
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * PUT /groups/{groupId}/members/{memberId} : Updates member role
-     * Updates member role
-     *
-     * @param groupId  (required)
-     * @param memberId  (required)
-     * @param updateMemberRoleRequest  (optional)
-     * @return Member role successfully updated (status code 200)
-     *         or Member or group not found (status code 404)
-     */
-    @Operation(
-        operationId = "updateMemberRole",
-        summary = "Updates member role",
-        tags = { "Group Members" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Member role successfully updated"),
-            @ApiResponse(responseCode = "404", description = "Member or group not found")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/groups/{groupId}/members/{memberId}",
-        consumes = { "application/json" }
-    )
-    default ResponseEntity<Void> updateMemberRole(
-        @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "memberId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("memberId") String memberId,
-        @Parameter(name = "UpdateMemberRoleRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) UpdateMemberRoleRequest updateMemberRoleRequest
-    ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

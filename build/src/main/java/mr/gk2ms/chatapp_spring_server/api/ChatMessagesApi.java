@@ -5,7 +5,6 @@
  */
 package mr.gk2ms.chatapp_spring_server.api;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mr.gk2ms.chatapp_spring_server.model.ChatMessage;
+import mr.gk2ms.chatapp_spring_server.model.DeleteMessagesRequest;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
@@ -41,12 +41,12 @@ public interface ChatMessagesApi {
     }
 
     /**
-     * DELETE /chats/{chatId}/messages/{messageId} : Deletes a message from chat
+     * DELETE /chats/{chatId}/messages : Deletes a message from chat
      * Deletes a message from chat
      *
      * @param chatId  (required)
-     * @param messageId  (required)
-     * @return Message successfully deleted (status code 200)
+     * @param deleteMessagesRequest  (optional)
+     * @return Message(s) successfully deleted (status code 200)
      *         or Message not found (status code 404)
      */
     @Operation(
@@ -54,17 +54,18 @@ public interface ChatMessagesApi {
         summary = "Deletes a message from chat",
         tags = { "Chat Messages" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Message successfully deleted"),
+            @ApiResponse(responseCode = "200", description = "Message(s) successfully deleted"),
             @ApiResponse(responseCode = "404", description = "Message not found")
         }
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/chats/{chatId}/messages/{messageId}"
+        value = "/chats/{chatId}/messages",
+        consumes = { "application/json" }
     )
     default ResponseEntity<Void> deleteChatMessage(
         @Parameter(name = "chatId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("chatId") String chatId,
-        @Parameter(name = "messageId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("messageId") String messageId
+        @Parameter(name = "DeleteMessagesRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) DeleteMessagesRequest deleteMessagesRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -97,13 +98,13 @@ public interface ChatMessagesApi {
     )
     default ResponseEntity<List<ChatMessage>> getAllChatMessages(
         @Parameter(name = "chatId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("chatId") String chatId,
-        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) int offset,
-        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) int limit
+        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) Integer offset,
+        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) Integer limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -144,7 +145,7 @@ public interface ChatMessagesApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -186,7 +187,7 @@ public interface ChatMessagesApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -253,6 +253,34 @@ paths:
       x-tags:
       - tag: Chat
   /chats/{chatId}/messages:
+    delete:
+      description: Deletes a message from chat
+      operationId: deleteChatMessage
+      parameters:
+      - explode: false
+        in: path
+        name: chatId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteMessagesRequest'
+      responses:
+        "200":
+          description: Message(s) successfully deleted
+        "404":
+          description: Message not found
+      summary: Deletes a message from chat
+      tags:
+      - Chat Messages
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: Chat Messages
     get:
       description: Fetches {limit} number of chat messages from number {offset}
       operationId: getAllChatMessages
@@ -269,14 +297,14 @@ paths:
         name: offset
         required: false
         schema:
-          type: number
+          type: integer
         style: form
       - explode: true
         in: query
         name: limit
         required: false
         schema:
-          type: number
+          type: integer
         style: form
       responses:
         "200":
@@ -329,35 +357,6 @@ paths:
       x-tags:
       - tag: Chat Messages
   /chats/{chatId}/messages/{messageId}:
-    delete:
-      description: Deletes a message from chat
-      operationId: deleteChatMessage
-      parameters:
-      - explode: false
-        in: path
-        name: chatId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: messageId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          description: Message successfully deleted
-        "404":
-          description: Message not found
-      summary: Deletes a message from chat
-      tags:
-      - Chat Messages
-      x-accepts: application/json
-      x-tags:
-      - tag: Chat Messages
     get:
       description: getMessage
       operationId: Get chat message by ID
@@ -399,7 +398,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupCreationRequest'
+              $ref: '#/components/schemas/GroupUpdateRequest'
       responses:
         "200":
           content:
@@ -510,14 +509,14 @@ paths:
         name: offset
         required: false
         schema:
-          type: number
+          type: integer
         style: form
       - explode: true
         in: query
         name: limit
         required: false
         schema:
-          type: number
+          type: integer
         style: form
       responses:
         "200":
@@ -566,8 +565,8 @@ paths:
       - tag: Group Messages
   /groups/{groupId}/messages/{messageId}:
     delete:
-      description: Delete message in group
-      operationId: deleteGroupMessage
+      description: Delete messages in group
+      operationId: deleteGroupMessages
       parameters:
       - explode: false
         in: path
@@ -576,21 +575,20 @@ paths:
         schema:
           type: string
         style: simple
-      - explode: false
-        in: path
-        name: messageId
-        required: true
-        schema:
-          type: string
-        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteMessagesRequest'
       responses:
         "200":
           description: Group message deleted successfully
         "404":
           description: Message not found
-      summary: Delete message in group
+      summary: Delete messages in group
       tags:
       - Group Messages
+      x-contentType: application/json
       x-accepts: application/json
       x-tags:
       - tag: Group Messages
@@ -654,8 +652,8 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Group Members
-    post:
-      description: Add members to group
+    put:
+      description: Add, remove, promote, demote members of group.
       operationId: addMembers
       parameters:
       - explode: false
@@ -669,78 +667,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddGroupMembersRequest'
+              $ref: '#/components/schemas/UpdateGroupMembersRequest'
       responses:
         "200":
-          description: Group members added successfully
+          description: Group members updated successfully
         "404":
           description: Group not found
-      summary: Add members to group
-      tags:
-      - Group Members
-      x-contentType: application/json
-      x-accepts: application/json
-      x-tags:
-      - tag: Group Members
-  /groups/{groupId}/members/{memberId}:
-    delete:
-      description: Gets member info such as number of messages written
-      operationId: getMemberInfo
-      parameters:
-      - explode: false
-        in: path
-        name: groupId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: memberId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        "200":
-          description: Member successfully removed
-        "404":
-          description: Member or group not found
-      summary: Gets member info such as number of messages written
-      tags:
-      - Group Members
-      x-accepts: application/json
-      x-tags:
-      - tag: Group Members
-    put:
-      description: Updates member role
-      operationId: updateMemberRole
-      parameters:
-      - explode: false
-        in: path
-        name: groupId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: memberId
-        required: true
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateMemberRoleRequest'
-      responses:
-        "200":
-          description: Member role successfully updated
-        "404":
-          description: Member or group not found
-      summary: Updates member role
+      summary: Manage group members
       tags:
       - Group Members
       x-contentType: application/json
@@ -803,7 +736,7 @@ components:
       name: offset
       required: false
       schema:
-        type: number
+        type: integer
       style: form
     limit:
       explode: true
@@ -811,7 +744,7 @@ components:
       name: limit
       required: false
       schema:
-        type: number
+        type: integer
       style: form
   schemas:
     User:
@@ -844,7 +777,7 @@ components:
     Chat:
       description: A Chat
       example:
-        dateCreated: 6.027456183070403
+        dateCreated: 6
         recipientA:
           avatarURI: avatarURI
           firstName: firstName
@@ -872,7 +805,7 @@ components:
             email: email
           id: id
           text: text
-          dateSent: 0.8008281904610115
+          dateSent: 0
         - sender:
             avatarURI: avatarURI
             firstName: firstName
@@ -883,11 +816,12 @@ components:
             email: email
           id: id
           text: text
-          dateSent: 0.8008281904610115
-        id: ""
+          dateSent: 0
+        id: id
       properties:
         id:
           description: Chat identifier
+          type: string
         recipientA:
           $ref: '#/components/schemas/User'
         recipientB:
@@ -897,7 +831,7 @@ components:
             $ref: '#/components/schemas/ChatMessage'
           type: array
         dateCreated:
-          type: number
+          type: integer
       type: object
     ChatMessage:
       description: A Chat Message
@@ -912,7 +846,7 @@ components:
           email: email
         id: id
         text: text
-        dateSent: 0.8008281904610115
+        dateSent: 0
       properties:
         id:
           description: Chat message identifier
@@ -922,7 +856,7 @@ components:
         sender:
           $ref: '#/components/schemas/User'
         dateSent:
-          type: number
+          type: integer
         chat:
           $ref: '#/components/schemas/Chat'
       type: object
@@ -937,14 +871,6 @@ components:
           phone: phone
           id: id
           email: email
-        administrator:
-          avatarURI: avatarURI
-          firstName: firstName
-          lastName: lastName
-          password: password
-          phone: phone
-          id: id
-          email: email
         members:
         - avatarURI: avatarURI
           firstName: firstName
@@ -960,6 +886,7 @@ components:
           phone: phone
           id: id
           email: email
+        name: name
         messages:
         - sender:
             avatarURI: avatarURI
@@ -971,7 +898,7 @@ components:
             email: email
           id: id
           text: text
-          dateSent: 0.8008281904610115
+          dateSent: 0
         - sender:
             avatarURI: avatarURI
             firstName: firstName
@@ -982,11 +909,29 @@ components:
             email: email
           id: id
           text: text
-          dateSent: 0.8008281904610115
+          dateSent: 0
         id: id
+        administrators:
+        - avatarURI: avatarURI
+          firstName: firstName
+          lastName: lastName
+          password: password
+          phone: phone
+          id: id
+          email: email
+        - avatarURI: avatarURI
+          firstName: firstName
+          lastName: lastName
+          password: password
+          phone: phone
+          id: id
+          email: email
       properties:
         id:
           description: Group identifier
+          type: string
+        name:
+          description: Group name
           type: string
         members:
           items:
@@ -998,8 +943,10 @@ components:
           items:
             $ref: '#/components/schemas/GroupMessage'
           type: array
-        administrator:
-          $ref: '#/components/schemas/User'
+        administrators:
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
       type: object
     GroupMessage:
       description: A Group Message
@@ -1014,7 +961,7 @@ components:
           email: email
         id: id
         text: text
-        dateSent: 0.8008281904610115
+        dateSent: 0
       properties:
         id:
           description: Group message identifier
@@ -1022,7 +969,7 @@ components:
         text:
           type: string
         dateSent:
-          type: number
+          type: integer
         sender:
           $ref: '#/components/schemas/User'
         group:
@@ -1071,15 +1018,12 @@ components:
           description: Refresh Token
           type: string
       type: object
-    GroupCreationRequest:
+    GroupUpdateRequest:
       description: Group creation request
       example:
-        creator: creator
         name: name
       properties:
         name:
-          type: string
-        creator:
           type: string
       type: object
     SendMessageRequest:
@@ -1093,7 +1037,7 @@ components:
         target:
           type: string
       type: object
-    AddGroupMembersRequest:
+    UpdateGroupMembersRequest:
       description: Add Group Members Request
       example:
         targetMembers:
@@ -1111,28 +1055,25 @@ components:
           phone: phone
           id: id
           email: email
+        operation: add
       properties:
         targetMembers:
           items:
             $ref: '#/components/schemas/User'
           type: array
-      type: object
-    UpdateMemberRoleRequest:
-      description: Update Member Role Request
-      example:
-        role: administrator
-      properties:
-        role:
+        operation:
           enum:
-          - administrator
-          - standard
+          - add
+          - remove
+          - promote
+          - demote
           type: string
       type: object
     ChatCreationResponse:
       description: Successful chat creation response
       example:
         schema:
-          dateCreated: 6.027456183070403
+          dateCreated: 6
           recipientA:
             avatarURI: avatarURI
             firstName: firstName
@@ -1160,7 +1101,7 @@ components:
               email: email
             id: id
             text: text
-            dateSent: 0.8008281904610115
+            dateSent: 0
           - sender:
               avatarURI: avatarURI
               firstName: firstName
@@ -1171,9 +1112,22 @@ components:
               email: email
             id: id
             text: text
-            dateSent: 0.8008281904610115
-          id: ""
+            dateSent: 0
+          id: id
       properties:
         schema:
           $ref: '#/components/schemas/Chat'
+      type: object
+    DeleteMessagesRequest:
+      description: Deletes messages in a group or chat
+      example:
+        messages:
+        - messages
+        - messages
+      properties:
+        messages:
+          items:
+            title: messageIds
+            type: string
+          type: array
       type: object

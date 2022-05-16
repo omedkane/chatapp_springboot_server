@@ -32,7 +32,7 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
   private User sender;
 
   @JsonProperty("dateSent")
-  private int dateSent;
+  private Integer dateSent;
 
   @JsonProperty("chat")
   private Chat chat;
@@ -94,7 +94,7 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
     this.sender = sender;
   }
 
-  public ChatMessage dateSent(int dateSent) {
+  public ChatMessage dateSent(Integer dateSent) {
     this.dateSent = dateSent;
     return this;
   }
@@ -103,13 +103,13 @@ public class ChatMessage extends RepresentationModel<ChatMessage>  implements Se
    * Get dateSent
    * @return dateSent
   */
-  @Valid 
+  
   @Schema(name = "dateSent", required = false)
-  public int getDateSent() {
+  public Integer getDateSent() {
     return dateSent;
   }
 
-  public void setDateSent(int dateSent) {
+  public void setDateSent(Integer dateSent) {
     this.dateSent = dateSent;
   }
 

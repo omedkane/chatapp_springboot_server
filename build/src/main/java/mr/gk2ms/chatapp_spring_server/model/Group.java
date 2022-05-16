@@ -27,6 +27,9 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
   @JsonProperty("id")
   private String id;
 
+  @JsonProperty("name")
+  private String name;
+
   @JsonProperty("members")
   @Valid
   private List<User> members = null;
@@ -38,8 +41,9 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
   @Valid
   private List<GroupMessage> messages = null;
 
-  @JsonProperty("administrator")
-  private User administrator;
+  @JsonProperty("administrators")
+  @Valid
+  private List<User> administrators = null;
 
   public Group id(String id) {
     this.id = id;
@@ -58,6 +62,25 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public Group name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Group name
+   * @return name
+  */
+  
+  @Schema(name = "name", description = "Group name", required = false)
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public Group members(List<User> members) {
@@ -133,23 +156,31 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
     this.messages = messages;
   }
 
-  public Group administrator(User administrator) {
-    this.administrator = administrator;
+  public Group administrators(List<User> administrators) {
+    this.administrators = administrators;
+    return this;
+  }
+
+  public Group addAdministratorsItem(User administratorsItem) {
+    if (this.administrators == null) {
+      this.administrators = new ArrayList<>();
+    }
+    this.administrators.add(administratorsItem);
     return this;
   }
 
   /**
-   * Get administrator
-   * @return administrator
+   * Get administrators
+   * @return administrators
   */
   @Valid 
-  @Schema(name = "administrator", required = false)
-  public User getAdministrator() {
-    return administrator;
+  @Schema(name = "administrators", required = false)
+  public List<User> getAdministrators() {
+    return administrators;
   }
 
-  public void setAdministrator(User administrator) {
-    this.administrator = administrator;
+  public void setAdministrators(List<User> administrators) {
+    this.administrators = administrators;
   }
 
   @Override
@@ -162,15 +193,16 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
     }
     Group group = (Group) o;
     return Objects.equals(this.id, group.id) &&
+        Objects.equals(this.name, group.name) &&
         Objects.equals(this.members, group.members) &&
         Objects.equals(this.creator, group.creator) &&
         Objects.equals(this.messages, group.messages) &&
-        Objects.equals(this.administrator, group.administrator);
+        Objects.equals(this.administrators, group.administrators);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, members, creator, messages, administrator);
+    return Objects.hash(id, name, members, creator, messages, administrators);
   }
 
   @Override
@@ -178,10 +210,11 @@ public class Group extends RepresentationModel<Group>  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Group {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    members: ").append(toIndentedString(members)).append("\n");
     sb.append("    creator: ").append(toIndentedString(creator)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    administrator: ").append(toIndentedString(administrator)).append("\n");
+    sb.append("    administrators: ").append(toIndentedString(administrators)).append("\n");
     sb.append("}");
     return sb.toString();
   }

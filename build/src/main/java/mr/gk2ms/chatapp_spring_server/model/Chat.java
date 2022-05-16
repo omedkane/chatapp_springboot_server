@@ -2,7 +2,6 @@ package mr.gk2ms.chatapp_spring_server.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +10,6 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.hateoas.RepresentationModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,7 +38,7 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
   private List<ChatMessage> messages = null;
 
   @JsonProperty("dateCreated")
-  private int dateCreated;
+  private Integer dateCreated;
 
   public Chat id(String id) {
     this.id = id;
@@ -126,7 +124,7 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
     this.messages = messages;
   }
 
-  public Chat dateCreated(int dateCreated) {
+  public Chat dateCreated(Integer dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -135,13 +133,13 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
    * Get dateCreated
    * @return dateCreated
   */
-  @Valid 
+  
   @Schema(name = "dateCreated", required = false)
-  public int getDateCreated() {
+  public Integer getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(int dateCreated) {
+  public void setDateCreated(Integer dateCreated) {
     this.dateCreated = dateCreated;
   }
 
@@ -161,20 +159,9 @@ public class Chat extends RepresentationModel<Chat>  implements Serializable {
         Objects.equals(this.dateCreated, chat.dateCreated);
   }
 
-  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
-  }
-
   @Override
   public int hashCode() {
     return Objects.hash(id, recipientA, recipientB, messages, dateCreated);
-  }
-
-  private static <T> int hashCodeNullable(JsonNullable<T> a) {
-    if (a == null) {
-      return 1;
-    }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
   }
 
   @Override

@@ -15,19 +15,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Group creation request
  */
 
-@Schema(name = "GroupCreationRequest", description = "Group creation request")
+@Schema(name = "GroupUpdateRequest", description = "Group creation request")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class GroupCreationRequest extends RepresentationModel<GroupCreationRequest>  implements Serializable {
+public class GroupUpdateRequest extends RepresentationModel<GroupUpdateRequest>  implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("creator")
-  private String creator;
-
-  public GroupCreationRequest name(String name) {
+  public GroupUpdateRequest name(String name) {
     this.name = name;
     return this;
   }
@@ -46,25 +43,6 @@ public class GroupCreationRequest extends RepresentationModel<GroupCreationReque
     this.name = name;
   }
 
-  public GroupCreationRequest creator(String creator) {
-    this.creator = creator;
-    return this;
-  }
-
-  /**
-   * Get creator
-   * @return creator
-  */
-  
-  @Schema(name = "creator", required = false)
-  public String getCreator() {
-    return creator;
-  }
-
-  public void setCreator(String creator) {
-    this.creator = creator;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -73,22 +51,20 @@ public class GroupCreationRequest extends RepresentationModel<GroupCreationReque
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GroupCreationRequest groupCreationRequest = (GroupCreationRequest) o;
-    return Objects.equals(this.name, groupCreationRequest.name) &&
-        Objects.equals(this.creator, groupCreationRequest.creator);
+    GroupUpdateRequest groupUpdateRequest = (GroupUpdateRequest) o;
+    return Objects.equals(this.name, groupUpdateRequest.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, creator);
+    return Objects.hash(name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GroupCreationRequest {\n");
+    sb.append("class GroupUpdateRequest {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    creator: ").append(toIndentedString(creator)).append("\n");
     sb.append("}");
     return sb.toString();
   }

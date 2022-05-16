@@ -5,7 +5,6 @@
  */
 package mr.gk2ms.chatapp_spring_server.api;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import mr.gk2ms.chatapp_spring_server.model.DeleteMessagesRequest;
 import mr.gk2ms.chatapp_spring_server.model.GroupMessage;
 import mr.gk2ms.chatapp_spring_server.model.SendMessageRequest;
 
@@ -42,17 +42,17 @@ public interface GroupMessagesApi {
     }
 
     /**
-     * DELETE /groups/{groupId}/messages/{messageId} : Delete message in group
-     * Delete message in group
+     * DELETE /groups/{groupId}/messages/{messageId} : Delete messages in group
+     * Delete messages in group
      *
      * @param groupId  (required)
-     * @param messageId  (required)
+     * @param deleteMessagesRequest  (optional)
      * @return Group message deleted successfully (status code 200)
      *         or Message not found (status code 404)
      */
     @Operation(
-        operationId = "deleteGroupMessage",
-        summary = "Delete message in group",
+        operationId = "deleteGroupMessages",
+        summary = "Delete messages in group",
         tags = { "Group Messages" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Group message deleted successfully"),
@@ -61,11 +61,12 @@ public interface GroupMessagesApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/groups/{groupId}/messages/{messageId}"
+        value = "/groups/{groupId}/messages/{messageId}",
+        consumes = { "application/json" }
     )
-    default ResponseEntity<Void> deleteGroupMessage(
+    default ResponseEntity<Void> deleteGroupMessages(
         @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "messageId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("messageId") String messageId
+        @Parameter(name = "DeleteMessagesRequest", description = "", schema = @Schema(description = "")) @Valid @RequestBody(required = false) DeleteMessagesRequest deleteMessagesRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -98,13 +99,13 @@ public interface GroupMessagesApi {
     )
     default ResponseEntity<List<GroupMessage>> getAllGroupMessages(
         @Parameter(name = "groupId", description = "", required = true, schema = @Schema(description = "")) @PathVariable("groupId") String groupId,
-        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) int offset,
-        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) int limit
+        @Parameter(name = "offset", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "offset", required = false) Integer offset,
+        @Parameter(name = "limit", description = "", schema = @Schema(description = "")) @Valid @RequestParam(value = "limit", required = false) Integer limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -145,7 +146,7 @@ public interface GroupMessagesApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0.8008281904610115 }";
+                    String exampleString = "{ \"sender\" : { \"avatarURI\" : \"avatarURI\", \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"password\" : \"password\", \"phone\" : \"phone\", \"id\" : \"id\", \"email\" : \"email\" }, \"id\" : \"id\", \"text\" : \"text\", \"dateSent\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

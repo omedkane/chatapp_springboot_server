@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.annotation.Generated;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -21,6 +22,7 @@ public class User extends RepresentationModel<User>  implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @JsonIgnore
   @JsonProperty("id")
   private String id;
 

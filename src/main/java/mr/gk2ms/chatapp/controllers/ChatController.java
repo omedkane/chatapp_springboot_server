@@ -4,8 +4,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,16 +38,14 @@ public class ChatController {
 	@PostMapping
 	public
 		ResponseEntity<Chat>
-		createByMessage(@AuthenticationPrincipal Jwt principal, @RequestBody SendMessageRequest msg) {
+		createByMessage(@RequestBody SendMessageRequest msg) {
 		@Valid
 		@Email(message = "Must be a valid email address !")
 		String receiverEmail = msg.getTarget();
-		String currentUserEmail = principal.getSubject();
 
-		UserEntity user = userService.findUserByEmail(currentUserEmail);
 		UserEntity receiver = userService.findUserByEmail(receiverEmail);
 
-		Chat chat = service.sendMessageToUser(user, receiver, msg.getMessage());
+		Chat chat = service.sendMessageToUser(receiver, msg.getMessage());
 		return ResponseEntity.ok(chat);
 	}
 
@@ -66,13 +62,11 @@ public class ChatController {
 
 	@GetMapping("/all/{page}/{limit}")
 	public ResponseEntity<PageResponse<Chat>> getAllChatByUserId(
-		@AuthenticationPrincipal Jwt principal,
 		@PathVariable("page") int page,
 		@PathVariable("limit") int limit
 	) {
 		System.out.println("What's up with that ?");
-		UserEntity currentUser = userService.findUserByEmail(principal.getSubject());
-		PageResponse<Chat> pageResponse = service.getAllChatByUserId(currentUser, page, limit);
+		PageResponse<Chat> pageResponse = service.getAllChatByUserId(page, limit);
 
 		return ResponseEntity.ok(pageResponse);
 	}

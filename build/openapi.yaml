@@ -101,6 +101,7 @@ components:
       properties:
         id:
           description: Chat identifier
+          type: string
         recipientA:
           $ref: "#/components/schemas/User"
         recipientB:
@@ -136,6 +137,9 @@ components:
         id:
           description: Group identifier
           type: string
+        name:
+          description: Group name
+          type: string
         members:
           type: array
           items:
@@ -146,8 +150,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GroupMessage"
-        administrator:
-          $ref: "#/components/schemas/User"
+        administrators:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
     #
     GroupMessage:
       description: A Group Message
@@ -202,13 +208,11 @@ components:
           description: Refresh Token
           type: string
     #
-    GroupCreationRequest:
+    GroupUpdateRequest:
       description: Group creation request
       type: object
       properties:
         name:
-          type: string
-        creator:
           type: string
     #
     SendMessageRequest:
@@ -220,7 +224,7 @@ components:
         target:
           type: string
     #
-    AddGroupMembersRequest:
+    UpdateGroupMembersRequest:
       description: Add Group Members Request
       type: object
       properties:
@@ -228,22 +232,29 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/User"
-    #
-    UpdateMemberRoleRequest:
-      description: Update Member Role Request
-      type: object
-      properties:
-        role:
+        operation:
           type: string
           enum:
-            - administrator
-            - standard
+            - add
+            - remove
+            - administration
+    #
     ChatCreationResponse:
       description: Successful chat creation response
       type: object
       properties:
         schema:
           $ref: "#/components/schemas/Chat"
+    #
+    DeleteMessagesRequest:
+      description: Deletes messages in a group or chat
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: string
+            title: messageIds
     #
   #
 #
@@ -480,6 +491,25 @@ paths:
                 $ref: "#/components/schemas/ChatMessage"
         404:
           description: Chat not found
+    delete:
+      tags:
+        - Chat Messages
+      operationId: "deleteChatMessage"
+      summary: Deletes a message from chat
+      description: Deletes a message from chat
+      parameters:
+        - $ref: "#/components/parameters/chatId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteMessagesRequest"
+      responses:
+        200:
+          description: Message(s) successfully deleted
+        404:
+          description: Message not found
+
   # ~
   /chats/{chatId}/messages/{messageId}:
     # ?
@@ -501,21 +531,6 @@ paths:
                 $ref: "#/components/schemas/ChatMessage"
         404:
           description: "Message not found"
-    # ?
-    delete:
-      tags:
-        - Chat Messages
-      operationId: "deleteChatMessage"
-      summary: Deletes a message from chat
-      description: Deletes a message from chat
-      parameters:
-        - $ref: "#/components/parameters/chatId"
-        - $ref: "#/components/parameters/messageId"
-      responses:
-        200:
-          description: Message successfully deleted
-        404:
-          description: Message not found
   # ~
   /groups:
     # ?
@@ -529,7 +544,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GroupCreationRequest"
+              $ref: "#/components/schemas/GroupUpdateRequest"
       responses:
         200:
           description: Group created successfully
@@ -658,12 +673,16 @@ paths:
     delete:
       tags:
         - Group Messages
-      operationId: deleteGroupMessage
-      summary: Delete message in group
-      description: Delete message in group
+      operationId: deleteGroupMessages
+      summary: Delete messages in group
+      description: Delete messages in group
       parameters:
         - $ref: "#/components/parameters/groupId"
-        - $ref: "#/components/parameters/messageId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteMessagesRequest"
       responses:
         200:
           description: Group message deleted successfully
@@ -690,57 +709,22 @@ paths:
                 items:
                   $ref: "#/components/schemas/User"
     # ?
-    post:
-      tags:
-        - Group Members
-      operationId: addMembers
-      summary: Add members to group
-      description: Add members to group
-      parameters:
-        - $ref: "#/components/parameters/groupId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AddGroupMembersRequest"
-      responses:
-        200:
-          description: Group members added successfully
-        404:
-          description: Group not found
-  # ~
-  /groups/{groupId}/members/{memberId}:
-    delete:
-      tags:
-        - Group Members
-      operationId: getMemberInfo
-      summary: Gets member info such as number of messages written
-      description: Gets member info such as number of messages written
-      parameters:
-        - $ref: "#/components/parameters/groupId"
-        - $ref: "#/components/parameters/memberId"
-      responses:
-        200:
-          description: Member successfully removed
-        404:
-          description: Member or group not found
-    # ?
     put:
       tags:
         - Group Members
-      operationId: updateMemberRole
-      summary: Updates member role
-      description: Updates member role
+      operationId: addMembers
+      summary: Manage group members
+      description: Add, remove, promote, demote members of group.
       parameters:
         - $ref: "#/components/parameters/groupId"
-        - $ref: "#/components/parameters/memberId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateMemberRoleRequest"
+              $ref: "#/components/schemas/UpdateGroupMembersRequest"
       responses:
         200:
-          description: Member role successfully updated
+          description: Group members updated successfully
         404:
-          description: Member or group not found
+          description: Group not found
+  # ~

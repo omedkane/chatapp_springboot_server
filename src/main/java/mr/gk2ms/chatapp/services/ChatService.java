@@ -32,7 +32,8 @@ public class ChatService extends BaseService<ChatEntity, Chat> {
 		this.userService = userService;
 	}
 
-	public Chat sendMessageToUser(UserEntity currentUser, UserEntity receiver, String messageText) {
+	public Chat sendMessageToUser(UserEntity receiver, String messageText) {
+		UserEntity currentUser = userService.getCurrentUser();
 		ChatEntity chatEntity = repository
 			.getChatByRecipients(currentUser.getId(), receiver.getId())
 			.orElse(
@@ -66,15 +67,16 @@ public class ChatService extends BaseService<ChatEntity, Chat> {
 		}
 	}
 
-	public PageResponse<Chat> getAllChatByUserId(UserEntity user, int page, int size) {
+	public PageResponse<Chat> getAllChatByUserId(int page, int size) {
+		UserEntity currentUser = userService.getCurrentUser();
 		Pageable pageRequest = PageRequest.of(page, size);
 
-		Page<ChatEntity> results = repository.getAllChatsByUserId(user.getId(), pageRequest);
+		Page<ChatEntity> results = repository.getAllChatsByUserId(currentUser.getId(), pageRequest);
 
 		return new PageResponse<Chat>()
 			.totalItems(results.getNumber())
 			.totalPages(results.getTotalPages())
-			.items(toModelList(results.getContent()));
+			.items(toModelAll(results.getContent()));
 	}
 
 	@Override

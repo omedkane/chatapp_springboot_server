@@ -29,7 +29,7 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
   private String text;
 
   @JsonProperty("dateSent")
-  private int dateSent;
+  private Integer dateSent;
 
   @JsonProperty("sender")
   private User sender;
@@ -75,7 +75,7 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
     this.text = text;
   }
 
-  public GroupMessage dateSent(int dateSent) {
+  public GroupMessage dateSent(Integer dateSent) {
     this.dateSent = dateSent;
     return this;
   }
@@ -84,13 +84,13 @@ public class GroupMessage extends RepresentationModel<GroupMessage>  implements 
    * Get dateSent
    * @return dateSent
   */
-  @Valid 
+  
   @Schema(name = "dateSent", required = false)
-  public int getDateSent() {
+  public Integer getDateSent() {
     return dateSent;
   }
 
-  public void setDateSent(int dateSent) {
+  public void setDateSent(Integer dateSent) {
     this.dateSent = dateSent;
   }
 

@@ -44,7 +44,9 @@ public class AuthController implements AuthApi {
 
 		UserEntity user = userService.findUserByEmail(email);
 
+		System.out.println("No User is found !");
 		if (Objects.isNull(user)) {
+			System.out.println("No User is found !");
 			throw new ResourceNotFoundException(ErrorCode.RESOURCE_NOT_FOUND);
 		}
 
@@ -53,7 +55,7 @@ public class AuthController implements AuthApi {
 		if (passMatches) {
 			return ResponseEntity.ok(service.getSignedInUser(user));
 		} else {
-			throw new InsufficientAuthenticationException("Email or password may be incorrect");
+			throw new InsufficientAuthenticationException("Password may be incorrect");
 		}
 	}
 

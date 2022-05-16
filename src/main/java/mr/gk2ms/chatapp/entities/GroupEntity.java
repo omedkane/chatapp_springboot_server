@@ -10,10 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "groups")
@@ -29,7 +31,16 @@ public class GroupEntity {
 	@Column
 	private String name;
 
-	@ManyToMany(mappedBy = "groups")
+	@ManyToOne
+	@JoinColumn
+	private UserEntity creator;
+
+	@ManyToMany
+	@JoinTable(
+		name = "memberships",
+		joinColumns = @JoinColumn(name = "group_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id")
+	)
 	private Set<UserEntity> members;
 
 	@OneToMany(
@@ -42,8 +53,9 @@ public class GroupEntity {
 	@Column
 	private Timestamp dateCreated;
 
-	@OneToOne
-	private UserEntity administrator;
+	@ManyToMany
+	@JoinTable(name = "group_admins")
+	private Set<UserEntity> administrators;
 
 	public GroupEntity() {
 	}
@@ -51,17 +63,19 @@ public class GroupEntity {
 	public GroupEntity(
 		UUID id,
 		String name,
+		UserEntity creator,
 		Set<UserEntity> members,
 		Set<GroupMessageEntity> messages,
 		Timestamp dateCreated,
-		UserEntity administrator
+		Set<UserEntity> administrators
 	) {
 		this.id = id;
 		this.name = name;
+		this.creator = creator;
 		this.members = members;
 		this.messages = messages;
 		this.dateCreated = dateCreated;
-		this.administrator = administrator;
+		this.administrators = administrators;
 	}
 
 	public UUID getId() {
@@ -78,6 +92,14 @@ public class GroupEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public UserEntity getCreator() {
+		return this.creator;
+	}
+
+	public void setCreator(UserEntity creator) {
+		this.creator = creator;
 	}
 
 	public Set<UserEntity> getMembers() {
@@ -104,12 +126,12 @@ public class GroupEntity {
 		this.dateCreated = dateCreated;
 	}
 
-	public UserEntity getAdministrator() {
-		return this.administrator;
+	public Set<UserEntity> getAdministrators() {
+		return this.administrators;
 	}
 
-	public void setAdministrator(UserEntity administrator) {
-		this.administrator = administrator;
+	public void setAdministrators(Set<UserEntity> administrators) {
+		this.administrators = administrators;
 	}
 
 	public GroupEntity id(UUID id) {
@@ -119,6 +141,11 @@ public class GroupEntity {
 
 	public GroupEntity name(String name) {
 		setName(name);
+		return this;
+	}
+
+	public GroupEntity creator(UserEntity creator) {
+		setCreator(creator);
 		return this;
 	}
 
@@ -137,8 +164,8 @@ public class GroupEntity {
 		return this;
 	}
 
-	public GroupEntity administrator(UserEntity administrator) {
-		setAdministrator(administrator);
+	public GroupEntity administrators(Set<UserEntity> administrators) {
+		setAdministrators(administrators);
 		return this;
 	}
 

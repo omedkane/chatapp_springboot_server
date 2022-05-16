@@ -3,6 +3,7 @@ package mr.gk2ms.chatapp.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mr.gk2ms.chatapp.entities.UserEntity;
 import mr.gk2ms.chatapp.entities.UserTokenEntity;
@@ -21,9 +22,10 @@ public class AuthService {
 	private JwtManager tokenManager;
 	private UserService userService;
 
-	public AuthService(UserTokenRepository userTokenRepository, JwtManager tokenManager) {
+	public AuthService(UserTokenRepository userTokenRepository, JwtManager tokenManager, UserService userService) {
 		this.userTokenRepository = userTokenRepository;
 		this.tokenManager = tokenManager;
+		this.userService = userService;
 	}
 
 	public Optional<SignedInUser> signUserUp(User user) {
@@ -59,6 +61,7 @@ public class AuthService {
 		return token;
 	}
 
+	@Transactional
 	public SignedInUser getSignedInUser(UserEntity userEntity) {
 		userTokenRepository.deleteByUserId(userEntity.getId());
 
